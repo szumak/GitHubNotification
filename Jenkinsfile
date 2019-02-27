@@ -14,6 +14,7 @@ pipeline {
             steps {
                 script {
                         echo "Building"
+                        githubNotify status: "PENDING", description: "Build is starting...", credentialsId: "github", account: "szumak", repo: "GitHubNotification"
                     }
                 }
         }
