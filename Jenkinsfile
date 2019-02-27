@@ -1,5 +1,15 @@
 #!/usr/bin/env groovy
 
+void setBuildStatus(String message, String state) {
+  step([
+      $class: "GitHubCommitStatusSetter",
+      reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/szumak/GitHubNotification"],
+      contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "ci/jenkins/build-status"],
+      errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
+      statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
+  ]);
+}
+
 pipeline {
     agent any
     stages {
@@ -14,7 +24,10 @@ pipeline {
             steps {
                 script {
                         echo "Building"
-                        githubNotify status: "PENDING", description: "Build is starting...", credentialsId: "github", account: "szumak", repo: "GitHubNotification"
+                        // This doesn't work: https://issues.jenkins-ci.org/browse/JENKINS-43370
+                        //                    https://issues.jenkins-ci.org/browse/JENKINS-40422
+                        // githubNotify status: "PENDING", description: "Build is starting...", credentialsId: "github", account: "szumak", repo: "GitHubNotification"
+                        setBuildStatus("Build succeeded", "SUCCESS");
                     }
                 }
         }
