@@ -13,8 +13,9 @@ pipeline {
         stage("Create secret file") {
             steps {
                 script {
-                       writeFile file: "config.json", text: credentials('secret.txt'), encoding: "UTF-8"
-                    }
+                       withCredentials([[$class: 'FileBinding', credentialsId: 'configuration_test', variable: 'SECRET_FILE']]) {
+                           sh 'ls -al $SECRET_FILE'
+                       }
                 }
         }
         stage("Done") {
