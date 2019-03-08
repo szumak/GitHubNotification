@@ -19,17 +19,12 @@ pipeline {
                        withCredentials([[$class: 'FileBinding', credentialsId: 'configuration_test', variable: 'SECRET_FILE']]) {
                            CONF=SECRET_FILE
                            sh 'ls -al $SECRET_FILE'
+                       sh """
+                          cat $CONF
+                          """
                        }
                 }
             }
         }
-        stage("Done") {
-            steps {
-               sh """
-                  cat $CONF
-                  """
-            }
-        }
      }
-
 }
