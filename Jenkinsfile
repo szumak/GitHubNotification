@@ -13,7 +13,7 @@ pipeline {
         stage("Create secret file") {
             steps {
                 script {
-                       writeFile file: "config.json", text: "some content", encoding: "UTF-8"
+                       writeFile file: "config.json", text: credentials('secret.txt'), encoding: "UTF-8"
                     }
                 }
         }
