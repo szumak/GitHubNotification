@@ -10,22 +10,19 @@ pipeline {
                     }
                 }
         }
-        stage("Building") {
+        stage("Create secret file") {
             steps {
                 script {
-                        echo "Building"
-                        // This doesn't work: https://issues.jenkins-ci.org/browse/JENKINS-43370
-                        //                    https://issues.jenkins-ci.org/browse/JENKINS-40422
-                        githubNotify status: "PENDING", description: "Build is starting...", credentialsId: "github", account: "szumak", repo: "GitHubNotification"
+                       writeFile file: "config.json", text: "some content", encoding: "UTF-8"
                     }
                 }
         }
         stage("Done") {
             steps {
-                script {
-                        echo "Job is done"
-                    }
-                }
+               sh """
+                  cat config.json 
+                  """
+            }
         }
      }
 
