@@ -17,6 +17,7 @@ pipeline {
                            sh 'ls -al $SECRET_FILE'
                        }
                 }
+            }
         }
         stage("Done") {
             steps {
