@@ -2,6 +2,9 @@
 
 pipeline {
     agent any
+    environment {
+       CONF=""
+    } 
     stages {
         stage("Start") {
             steps {
@@ -14,6 +17,7 @@ pipeline {
             steps {
                 script {
                        withCredentials([[$class: 'FileBinding', credentialsId: 'configuration_test', variable: 'SECRET_FILE']]) {
+                           CONF=SECRET_FILE
                            sh 'ls -al $SECRET_FILE'
                        }
                 }
@@ -22,7 +26,7 @@ pipeline {
         stage("Done") {
             steps {
                sh """
-                  cat config.json 
+                  cat $CONF
                   """
             }
         }
